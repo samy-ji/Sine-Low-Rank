@@ -322,6 +322,7 @@ class Linear(nn.Linear, sinLoraLayer):
         self.reset_parameters()
         if fan_in_fan_out:
             self.weight.data = self.weight.data.T
+        self.s = math.sqrt(in_features)
 
     def reset_parameters(self):
         nn.Linear.reset_parameters(self)
