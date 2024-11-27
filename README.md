@@ -29,7 +29,34 @@ Applying a sine nonlinearity to a low-rank matrix  $\phi(\mathbf{x}) = \sin(\ome
     dropout_x = self.lora_dropout(x)
 
     result += ((self.lora_dropout(x.to(self.lora_A.weight.dtype))) @ torch.sin(self.freq * self.lora_A.weight.T @ self.lora_B.weight.T))/self.s * self.scaling
-    return result 
+    return result
+
+## DoRA forward pass
+def forward(self, x: torch.Tensor):
+    base_result = F.linear(x, transpose(self.weight, self.fan_in_fan_out))
+    dropout_x = self.lora_dropout(x)
+
+    new_weight_v = self.weight + (self.lora_B.weight @ self.lora_A.weight) * self.scaling
+    norm_scale = self.weight_m_wdecomp.weight.view(-1) / (torch.linalg.norm(new_weight_v,dim=1)).detach()
+    result = base_result + (norm_scale-1) * (F.linear(dropout_x, transpose(self.weight, self.fan_in_fan_out)))
+    result += ( norm_scale * (self.lora_B(self.lora_A(dropout_x.to(self.lora_A.weight.dtype))))) * self.scaling
+    if not self.bias is None:
+      result += self.bias.view(1, -1).expand_as(result)
+    return result
+
+## Sine DoRA forward pass
+
+def forward(self, x: torch.Tensor):
+    base_result = F.linear(x, transpose(self.weight, self.fan_in_fan_out))
+    dropout_x = self.lora_dropout(x)
+
+    new_weight_v = self.weight + torch.sin(self.freq*(self.lora_B.weight @ self.lora_A.weight))/self.s * self.scaling 
+    norm_scale = self.weight_m_wdecomp.weight.view(-1) / (torch.linalg.norm(new_weight_v,dim=1)).detach()
+    result = base_result + (norm_scale-1) * (F.linear(dropout_x, transpose(self.weight, self.fan_in_fan_out)))
+    result += ( norm_scale * (self.lora_B(self.lora_A(dropout_x.to(self.lora_A.weight.dtype))))) * self.scaling
+    if not self.bias is None:
+      result += self.bias.view(1, -1).expand_as(result)
+    return result
 
 ```
 
