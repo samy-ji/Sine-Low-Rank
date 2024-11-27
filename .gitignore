@@ -1,0 +1,15 @@
+dataset
+.vscode
+dora
+dora_results
+dora_simple
+experiments
+finetuned_result_qkvud
+nov17
+old
+original_dora_results
+original_dora_simple_results
+sinedora*
+commonsense_170k.json
+d.py
+download.ipynb
