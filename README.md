@@ -8,6 +8,15 @@ The official PyTorch implementation of [**Efficient Learning with Sine-Activated
 
 Sine-LoRA applies a sine function to improve the spectrum of low-rank decompositions for fine-tuning. 
 
+| <img src="svd_1.png" alt="Figure 1" width="250"> | <img src="svd_2.png" alt="Figure 2" width="250"> |
+|--------------------------------------------------|--------------------------------------------------|
+
+Applying a sine nonlinearity to a low-rank matrix  $\phi(\mathbf{x}) = \sin(\omega \mathbf{U} \mathbf{V}^{T})$ has improved spectral properties. $\omega$ controls the spectrum smoothness.
+
+
+
+
+
 **Performance and parameter count of the LLaMA 3-8B model fine-tuned using the LoRA and sine-LoRA methods** 
 
 | **Method**              | **Params** | **BoolQ** | **PIQA** | **SIQA** | **HS**   | **WG**   | **ARC-e** | **ARC-c** | **OBQA** | **Avg.** |
