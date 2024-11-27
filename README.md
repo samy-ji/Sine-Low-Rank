@@ -53,7 +53,7 @@ def forward(self, x: torch.Tensor):
     new_weight_v = self.weight + torch.sin(self.freq*(self.lora_B.weight @ self.lora_A.weight))/self.s * self.scaling 
     norm_scale = self.weight_m_wdecomp.weight.view(-1) / (torch.linalg.norm(new_weight_v,dim=1)).detach()
     result = base_result + (norm_scale-1) * (F.linear(dropout_x, transpose(self.weight, self.fan_in_fan_out)))
-    result += ( norm_scale * (self.lora_B(self.lora_A(dropout_x.to(self.lora_A.weight.dtype))))) * self.scaling
+    result += (norm_scale * torch.sin(self.freq*(self.lora_B(self.lora_A(dropout_x.to(self.lora_A.weight.dtype))))/self.s)) * self.scaling
     if not self.bias is None:
       result += self.bias.view(1, -1).expand_as(result)
     return result
