@@ -14,7 +14,24 @@ Sine-LoRA applies a sine function to improve the spectrum of low-rank decomposit
 Applying a sine nonlinearity to a low-rank matrix  $\phi(\mathbf{x}) = \sin(\omega \mathbf{U} \mathbf{V}^{T})$ has improved spectral properties. $\omega$ controls the spectrum smoothness.
 
 
+```
+## LoRA forward pass
+  def forward(self, x: torch.Tensor):
+    base_result = F.linear(x, transpose(self.weight, self.fan_in_fan_out), bias=self.bias)
+    dropout_x = self.lora_dropout(x)
 
+    result += (self.lora_B(self.lora_A(dropout_x.to(self.lora_A.weight.dtype)))) * self.scaling
+    return result
+
+## Sine LoRA forward pass
+  def forward(self, x: torch.Tensor):
+    base_result = F.linear(x, transpose(self.weight, self.fan_in_fan_out), bias=self.bias)
+    dropout_x = self.lora_dropout(x)
+
+    result += ((self.lora_dropout(x.to(self.lora_A.weight.dtype))) @ torch.sin(self.freq * self.lora_A.weight.T @ self.lora_B.weight.T))/self.s * self.scaling
+    return result 
+
+```
 
 
 **Performance and parameter count of the LLaMA 3-8B model fine-tuned using the LoRA and sine-LoRA methods** 
