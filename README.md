@@ -18,17 +18,13 @@ Applying a sine nonlinearity to a low-rank matrix  $\phi(\mathbf{x}) = \sin(\ome
 ```
 ## LoRA forward pass
   def forward(self, x: torch.Tensor):
-    base_result = F.linear(x, transpose(self.weight, self.fan_in_fan_out), bias=self.bias)
-    dropout_x = self.lora_dropout(x)
-
-    result += (self.lora_B(self.lora_A(dropout_x.to(self.lora_A.weight.dtype)))) * self.scaling
+    result = F.linear(x, transpose(self.weight, self.fan_in_fan_out), bias=self.bias)
+    result += ((self.lora_dropout(x.to(self.lora_A.weight.dtype)) @ self.lora_A.weight.T) @ self.lora_B.weight.T) * self.scaling
     return result
 
 ## Sine LoRA forward pass
   def forward(self, x: torch.Tensor):
-    base_result = F.linear(x, transpose(self.weight, self.fan_in_fan_out), bias=self.bias)
-    dropout_x = self.lora_dropout(x)
-
+    result = F.linear(x, transpose(self.weight, self.fan_in_fan_out), bias=self.bias)
     result += ((self.lora_dropout(x.to(self.lora_A.weight.dtype))) @ torch.sin(self.freq * self.lora_A.weight.T @ self.lora_B.weight.T))/self.s * self.scaling
     return result
 ```
