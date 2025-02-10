@@ -1,7 +1,0 @@
-matrix_kernel.cu
-matrix_mul.cpp
-setup.py
-matrix_mul.egg-info/PKG-INFO
-matrix_mul.egg-info/SOURCES.txt
-matrix_mul.egg-info/dependency_links.txt
-matrix_mul.egg-info/top_level.txt
