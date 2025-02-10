@@ -74,6 +74,18 @@ def forward(self, x: torch.Tensor):
 
 ```
 
+**Performance and parameter count of the LLaMA 3-8B model fine-tuned using the LoRA and sine-LoRA methods**
+
+| **Method**              | **Params** | **BoolQ** | **PIQA** | **SIQA** | **HS**  | **WG**  | **ARC-e** | **ARC-c** | **OBQA** | **Avg.** |
+|--------------------------|------------|-----------|----------|----------|---------|---------|-----------|-----------|----------|----------|
+| LoRA<sub>k=4</sub>      | 7.1M       | 73.58     | 86.29    | 79.99    | 94.92   | 79.95    | 63.91      | 88.7       | 83.0      | 80.04    |
+| Sine LoRA<sub>k=4</sub> | 7.1M       | 72.69     | 87.38    | 79.32    | 94.39   | 85.32    | 75.01      | 88.64      | 86.2      | **83.61** |
+| LoRA<sub>k=8</sub>      | 14.2M      | 72.97     | 87.43    | 78.81    | 72.18   | 85.80    | 77.47      | 88.38      | 83.20     | 80.79   |
+| Sine LoRA<sub>k=8</sub> | 14.2M      | 73.42     | 86.51    | 80.3     | 94.16   | 85.87    | 76.36      | 88.05      | 84.6      | **83.66** |
+| LoRA<sub>k=16</sub>     | 28.3M      | 73.57     | 85.58    | 79.27    | 93.97   | 85.71    | 75.42      | 86.44      | 83.20     | 82.90    |
+| Sine LoRA<sub>k=16</sub>| 28.3M      | 73.7      | 87.65    | 80.76    | 94.93   | 84.45    | 79.1       | 89.77      | 84.4      | **84.35** |
+| LoRA<sub>k=32</sub>     | 56.6M      | 70.64     | 86.13    | 78.25    | 91.48   | 83.19    | 69.71      | 85.73      | 81.40     | 80.82    |
+| Sine LoRA<sub>k=32</sub>| 56.6M      | 72.42     | 86.51    | 79.78    | 93.96   | 85.16    | 78.07      | 87.58      | 85.0      | **83.56** |
 
 **Performance and parameter count of the LLaMA 3-8B model fine-tuned using the DoRA and sine-DoRA methods**
 
@@ -85,6 +97,7 @@ def forward(self, x: torch.Tensor):
 | Sine DoRA<sub>k=16</sub>| 29.1M      | 75.1  | 89.0 | 81.0 | 95.3    | 86.1| 90.0      | 79.3  | 86.2 | **85.3** |      
 | DoRA<sub>k=32</sub>    | 57.4M      | 74.6      | 89.3 | 79.9     | 95.5    | 85.6    | 90.5  | 80.4  | 85.8 | 85.2     | 
 | Sine DoRA<sub>k=32</sub>| 57.4M      |  75.8    |   89.3   |   80.3   |   95.9 |  86.1 | 90.2      | 79.4      | 85.4     | **85.3** |       
+
 
 
 [1] Liu et al. DoRA: Weight-Decomposed Low-Rank Adaptation. ICML 2024
